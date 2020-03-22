@@ -16,23 +16,23 @@
   }
   return str;
 }
-
 var parseBold = function(str) {
   var boldRegExp = /(\*\*)(.*?)\1/;
   var stra = [];
   while ((stra = boldRegExp.exec(str)) !== null) {
     str = str.replace(stra[0], '<b>' + stra[2] + '</b>')
-  return str;
   }
-  
- var parseCodeBlock  = function(str) {
+  return str;
+ }
+ 
+var parseCodeBlock = function(str) {
   var codeRegExp = /```(.*?)```/;
   var stra = [];
   while ((stra = codeRegExp.exec(str)) !== null) {
     str = str.replace(stra[0], '<code>' + stra[1] + '</code>');
+  }
   return str;
  }
-
 var parseStrong = function(str) {
   var strongRegExp = /(~~)(.*?)\1/;
   var stra = [];
@@ -61,11 +61,10 @@ var parseStrong = function(str) {
  }
 
 var parseNewLine = function(str) {
-  var newLineRegExp = /(^|[^\n])\n{1}(?!\n)/;
-  var stra = []; var tmp;
+  var newLineRegExp = /(\n)/;
+  var stra = [];
   while ((stra = newLineRegExp.exec(str)) !== null) {
-    tmp = stra[0].replace('\n', '<br/>')
-    str = str.replace(stra[0], tmp);
+    str = str.replace(stra[0], '<br/>');
   }
   return str;
  }
@@ -79,6 +78,15 @@ var parseNewLine = function(str) {
   return str;
  }
 
+ var parseDel = function(str) {
+  var delRegExp = /\{(.*?)\}/
+  var stra = [];
+  while ((stra = delRegExp.exec(str)) !== null) {
+    str = str.replace(stra[0], '<del>' + stra[1] + '</del>');
+  }
+  return str;
+ }
+
  var parseBlockQuote = function(str) {
   var quoteRegExp = /\:\"(.*?)\"\:/
   var stra = [];
@@ -88,14 +96,6 @@ var parseNewLine = function(str) {
   return str;
  }
 
- var parseDel = function(str) {
-  var delRegExp = /\{(.*?)\}/
-  var stra = [];
-  while ((stra = delRegExp.exec(str)) !== null) {
-    str = str.replace(stra[0], '<del>' + stra[1] + '</del>');
-  }
-  return str;
- }
 
 var markdown = {
   parse: function (str, strict) {
@@ -107,10 +107,11 @@ var markdown = {
     str = parseStrong(str);
     str = parseHorizontaleLine(str);
     str = parseLink(str);
-    str = parseCode(str);
-    str = parseBlockQuote(str);
+	str = parseBlockQuote(str);
     str = parseDel(str);
-    str = parseCodeBlock (str);
+    str = parseCode(str);
+    str = parseCodeBlock(str);
+	
     return str;
   }
 };
